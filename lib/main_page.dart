@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'controllers/home_controller.dart';
 import 'controllers/reltime_controller.dart';
 import 'package:flutter/material.dart';

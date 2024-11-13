@@ -77,6 +77,8 @@ class ApiService {
       Uri.parse('$baseUrl/status'),
       body: {'code': code, 'status': stat},
     );
+
+    print(response.body);
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       return Status.fromJson(jsonData);

@@ -51,73 +51,71 @@ class MyPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(3.0),
-                      height: 200,
-                      child: Obx(() => ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: tabController.button.value
-                                ? Colors.red
-                                : Colors.blueGrey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(3.0),
+                    height: 200,
+                    child: Obx(() => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: tabController.button.value
+                              ? Colors.red
+                              : Colors.blueGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {
-                            tabController.button.value
-                                ? tabController.addArt("0.01", 'press')
-                                : null;
-                          },
-                          child: Icon(
-                            Icons.cancel_outlined,
-                            size: 60,
-                          ))),
-                    ),
+                        ),
+                        onPressed: () {
+                          tabController.button.value
+                              ? tabController.addArt("0.01", 'press')
+                              : null;
+                        },
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          size: 60,
+                        ))),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(3.0),
-                      height: 200,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueGrey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(3.0),
+                    height: 200,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {},
-                          child: Obx(() => Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'SKOR KEBENARAN',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    '${tabController.modVal.value}',
-                                    style: TextStyle(fontSize: 48),
-                                  ),
-                                ],
-                              ))),
-                    ),
+                        ),
+                        onPressed: () {},
+                        child: Obx(() => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'SKOR KEBENARAN',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  '${tabController.modVal.value}',
+                                  style: TextStyle(fontSize: 48),
+                                ),
+                              ],
+                            ))),
                   ),
-                ],
-              ),
-              ButtonList(),
-            ],
-          ),
+                ),
+              ],
+            ),
+            ButtonList(),
+          ],
         ),
       ),
       bottomNavigationBar: Padding(

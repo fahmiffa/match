@@ -168,11 +168,10 @@ class MyArt extends StatelessWidget {
                       },
                       child: Text(buttonLabels[index]),
                       style: ElevatedButton.styleFrom(
-                        primary: tabController.append.containsKey(par) &&
+                        foregroundColor: Colors.black, backgroundColor: tabController.append.containsKey(par) &&
                                 tabController.append[par] == buttonLabels[index]
                             ? Colors.grey[400]
                             : Colors.grey[300],
-                        onPrimary: Colors.black,
                       ),
                     ));
               },

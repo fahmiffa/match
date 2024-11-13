@@ -56,6 +56,8 @@ class HomeController extends GetxController {
     List<String> gan = <String>['Ganda', 'Solo'];
     Ganda = gan.contains(istype);
     tabCount.value = istype == 'Tanding' ? 5 : 2;
+    var data = await ApiService.status(isCode);
+    matchStatus(data);
   }
 
   void checkStatus() async {

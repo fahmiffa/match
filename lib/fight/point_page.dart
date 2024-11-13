@@ -77,6 +77,7 @@ class PointPage extends StatelessWidget {
   }
 
   Widget Ver(int x) {
+    // ignore: invalid_use_of_protected_member
     final arr = pointController.peserta.value;
     return Center(
       child: Column(
