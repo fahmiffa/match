@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/auth_controller.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
-// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   final AuthController _authController = Get.put(AuthController());
 
@@ -14,7 +11,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Match'),
+        title: Text('Match One'),
         backgroundColor: Colors.blueGrey,
       ),
       body: Center(
@@ -46,9 +43,33 @@ class LoginPage extends StatelessWidget {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
                 ),
               ),
+              SizedBox(height: 20),
+               Obx(() {
+                return _authController.Bsync.value ? sync() : SizedBox(height: 5);
+               }),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget sync() {
+    return Container(
+      width: 200,
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: () {
+          _authController.getDeviceSerial();
+        },
+        child: Text('Sync',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
       ),
     );
   }

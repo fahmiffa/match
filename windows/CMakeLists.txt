@@ -10,6 +10,9 @@ set(BINARY_NAME "match")
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)
 
+# Set the icon for the application.
+set(WINDOWS_ICON_PATH "${CMAKE_CURRENT_SOURCE_DIR}/resources/punch.ico")
+
 # Define build configuration option.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)

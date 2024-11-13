@@ -1,57 +1,133 @@
-import 'package:Match/model/ApiService.dart';
-import 'package:Match/model/user.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import '../model/ApiService.dart';
+import '../model/user.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'handle_controller.dart';
 
 class PointController extends GetxController {
-  final matchStatus = Status(status: 0).obs;
+  final HandleController dataController = Get.put(HandleController());
+  final channel = WebSocketChannel.connect(Uri.parse(ApiService.socketUrl));
   var pointData = <Point>[].obs;
-
-  final userData = User(
-          code: '',
-          name: '',
-          type: '',
-          status: 0,
-          contest: '',
-          peserta: List.empty())
-      .obs;
+  var peserta = <Peserta>[].obs;
+  var side = List.empty();
+  RxList blue = [0, 0].obs;
+  RxList red = [0, 0].obs;
+  RxInt hit = 0.obs;
+  RxInt kick = 0.obs;
 
   final box = GetStorage();
   String get isCode => box.read('code') ?? '';
+  String get isName => box.read('name') ?? '';
 
   @override
   void onInit() {
     super.onInit();
-    dataUser();
+    dataPoint();
   }
 
-  void dataUser() async {
-    var user = await ApiService.login(isCode);
-    userData(user);
+  void dataPoint() async {
+    var da = await ApiService.cPoint(isCode);
+    final List<dynamic> data = da['peserta'];
+    peserta.assignAll(data.map((json) => Peserta.fromJson(json)).toList());
+    final List<dynamic> dap = da['point'];
+    pointData.assignAll(dap.map((json) => Point.fromJson(json)).toList());
   }
 
-  void checkStatus() async {
+  parseName(String name, int tipe, String par) {
+    String cor = tipe == 1 ? 'blue' : 'red';
+    String nam = name.replaceAll('Juri ', 'j');
+    return '${nam}-${cor}-${par.toLowerCase()}';
+  }
+
+  void addValue(String val, int id, String type, tipe) async {
+    var status = await dataController.LoadStatus();
+    var timer = await dataController.LoadTimer();
+
     try {
-      var data = await ApiService.status(isCode);
-      matchStatus(data);
-      if (matchStatus.value.status != 2) {
-        Get.snackbar('Error', 'Pertandingan Sudah selesai atau Belum di mulai',
-            colorText: Colors.white, backgroundColor: Colors.red[800]);
-      } else {
-        Get.toNamed('/point');
+      if (!status) {
+        throw Exception('Pertandingan belum di mulai');
+      }
+
+      if (!timer) {
+        throw Exception('TImer belum berjalan');
+      }
+
+      await ApiService.upValue(val, isCode, id, type);
+      String juri = parseName(isName, int.parse(tipe), type);
+
+      Map<String, dynamic> jsonMap = {
+        "type": 3,
+        "data": juri,
+        "Iscode": isCode
+      };
+      String jsonString = jsonEncode(jsonMap);
+      channel.sink.add(jsonString);
+      if (type == 'Hit') {
+        int val = 1;
+        if (int.parse(tipe) == 1) {
+          blue[0] += val;
+        }
+        if (int.parse(tipe) == 2) {
+          red[0] += val;
+        }
+      }
+
+      if (type == 'Kick') {
+        int val = 1;
+        if (int.parse(tipe) == 1) {
+          blue[1] += val;
+        }
+        if (int.parse(tipe) == 2) {
+          red[1] += val;
+        }
       }
     } catch (e) {
-      Get.snackbar('Error', 'Code Invalid',
+      Get.snackbar('Error', '${e}',
           colorText: Colors.white, backgroundColor: Colors.red[800]);
     }
   }
 
-  void UpdateStatus(String stat) async {
-    await ApiService.UpStatus(stat, isCode);
-    Get.snackbar('Success', 'Pertandingan di update',
-        colorText: Colors.white, backgroundColor: Colors.green[800]);
+  void addValueVer(String val, int id, String type, tipe) async {
+
+    try {
+
+      await ApiService.upValue(val, isCode, id, type);
+      String juri = parseName(isName, int.parse(tipe), type);
+
+      Map<String, dynamic> jsonMap = {
+        "type": 3,
+        "data": juri,
+        "Iscode": isCode
+      };
+      String jsonString = jsonEncode(jsonMap);
+      channel.sink.add(jsonString);
+
+      if (type == 'Hit') {
+        int val = 1;
+        if (int.parse(tipe) == 1) {
+          blue[0] += val;
+        }
+        if (int.parse(tipe) == 2) {
+          red[0] += val;
+        }
+      }
+
+      if (type == 'Kick') {
+        int val = 1;
+        if (int.parse(tipe) == 1) {
+          blue[1] += val;
+        }
+        if (int.parse(tipe) == 2) {
+          red[1] += val;
+        }
+      }
+
+    } catch (e) {
+      Get.snackbar('Error', '${e}',
+          colorText: Colors.white, backgroundColor: Colors.red[800]);
+    }
   }
-
-
 }
