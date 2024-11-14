@@ -33,7 +33,6 @@ getStatus() async {
     await ApiService.login(device['id']);
     return true;
   } catch (e) {
-    print(e);
     return false;
   }
 }

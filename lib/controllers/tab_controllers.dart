@@ -171,15 +171,11 @@ class TabControllers extends GetxController
 
   void addPower(String val, String type, int index) async {
     var status = await dataController.LoadStatus();
-    var timer = await dataController.LoadTimer();
     try {
       if (!status) {
         throw Exception('Pertandingan belum di mulai');
       }
 
-      if (!timer) {
-        throw Exception('TImer belum berjalan');
-      }
       await ApiService.cArt(isCode, val, type);
       active.value = index;
       buttonPower.value = false;

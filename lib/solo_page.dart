@@ -42,7 +42,7 @@ class MyPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.logout),
               onPressed: () {
-                _authController.logout();
+                _authController.checkLoginStatus();
               },
             ),
           ],

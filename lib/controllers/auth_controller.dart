@@ -1,36 +1,19 @@
 import 'package:Match/helper.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../model/ApiService.dart';
 import 'package:get_storage/get_storage.dart';
 import '../model/user.dart';
-import 'dart:async';
 
 class AuthController extends GetxController {
-  var deviceid = ''.obs;
-  var deviceBrand = ''.obs;
-  var qey = ''.obs;
-  RxBool Bsync = false.obs;
 
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-  Future<void> getDeviceSerial() async {
-    try {
-      var device = await getDevices();
-      await ApiService.devices(device['id'], device['brand']);
-      Get.snackbar('Succes', 'Device Snysc',
-          colorText: Colors.white, backgroundColor: Colors.green[800]);
-    } catch (e) {}
-  }
-
-  RxBool isWasit = false.obs;
+  RxBool isCore  = false.obs;
   RxString uuid = ''.obs;
+  RxBool isDev = false.obs;
 
   final box = GetStorage();
   String get isCode => box.read('code') ?? '';
   bool get isLogin => box.read('isLogin') ?? false;
-  bool get isCore => box.read('core') ?? false;
   bool Ganda = false;
 
   final userData = User(
@@ -53,14 +36,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    sync();
-  }
-
-  void sync() async {
-    try {
-      var da = await ApiService.sync();
-      Bsync.value = da;
-    } catch (e) {}
+    status();
   }
 
   void checkLoginStatus() async {
@@ -69,8 +45,8 @@ class AuthController extends GetxController {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (stts) {
         Inject(device['id']);
+        isCore.value = true;
       } else {
-        print('gas');
         box.erase();
         uuid.value = device['id'];
       }
@@ -81,7 +57,6 @@ class AuthController extends GetxController {
     try {
       var user = await ApiService.login(code);
       userData(user);
-      box.write('core', true);
       box.write('code', code);
       box.write('type', userData.value.type);
       box.write('id', userData.value.id);
@@ -115,34 +90,13 @@ class AuthController extends GetxController {
     }
   }
 
-  void login(String code) async {
+  void status() async {
     try {
-      var user = await ApiService.login(code);
-      userData(user);
-      box.write('code', userData.value.code);
-      box.write('type', userData.value.type);
-      box.write('id', userData.value.id);
-      box.write('jur', userData.value.jurus);
-      box.write('name', userData.value.name);
-
-      if (userData.value.name == 'dewan') {
-        box.write('status', 'dewan');
-      } else if (userData.value.name == 'timer') {
-        box.write('status', 'timer');
-      } else {
-        box.write('status', 'juri');
-      }
-      Get.offAllNamed('/home');
-      box.write('isLogin', true);
+      var user = await ApiService.sync();    
+      isDev.value = user;
     } catch (e) {
-      print(e);
-      Get.snackbar('Error', 'Code Invalid',
-          colorText: Colors.white, backgroundColor: Colors.red[800]);
+       print(e);
     }
   }
 
-  void logout() {
-    box.erase();
-    Get.offAllNamed('/');
-  }
 }

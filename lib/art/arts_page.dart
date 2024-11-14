@@ -56,7 +56,7 @@ class MyArt extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () {
-                _authController.logout();
+                _authController.checkLoginStatus();
               },
             ),
           ],

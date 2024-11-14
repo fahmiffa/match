@@ -88,11 +88,9 @@ class MainPage extends StatelessWidget {
           backgroundColor: Colors.blueGrey,
           actions: [
             IconButton(
-              icon: _authController.isCore
-                  ? Icon(Icons.replay_outlined)
-                  : Icon(Icons.logout),
+              icon: Icon(Icons.replay_outlined),
               onPressed: () {
-                _authController.logout();
+                _authController.checkLoginStatus();
               },
             ),
           ],
@@ -137,11 +135,9 @@ class MainPage extends StatelessWidget {
           backgroundColor: Colors.blueGrey,
           actions: [
             IconButton(
-              icon: _authController.isCore
-                  ? Icon(Icons.replay_outlined)
-                  : Icon(Icons.logout),
+              icon: Icon(Icons.replay_outlined),
               onPressed: () {
-                _authController.logout();
+                _authController.checkLoginStatus();
               },
             ),
           ],

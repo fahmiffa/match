@@ -6,14 +6,12 @@ import 'fight/point_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'home_page.dart';
-import 'package:get_storage/get_storage.dart';
-import 'login_page.dart';
 import 'solo_page.dart';
 import 'timer_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await GetStorage.init();
   runApp(MyApp());
 }
 
@@ -22,7 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(initialRoute: '/', getPages: [
       GetPage(name: '/', page: () => SplashScreen()),
-      GetPage(name: '/login', page: () => LoginPage()),
       GetPage(
         name: '/solo',
         page: () => SoloPage(),
