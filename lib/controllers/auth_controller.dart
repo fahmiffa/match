@@ -6,10 +6,9 @@ import 'package:get_storage/get_storage.dart';
 import '../model/user.dart';
 
 class AuthController extends GetxController {
-
-  RxBool isCore  = false.obs;
+  RxBool isCore = false.obs;
   RxString uuid = ''.obs;
-  RxBool isDev = false.obs;
+  RxBool isDev = true.obs;
 
   final box = GetStorage();
   String get isCode => box.read('code') ?? '';
@@ -55,7 +54,7 @@ class AuthController extends GetxController {
 
   void Inject(String code) async {
     try {
-      var user = await ApiService.login(code);
+      var user = await getData();
       userData(user);
       box.write('code', code);
       box.write('type', userData.value.type);
@@ -91,12 +90,18 @@ class AuthController extends GetxController {
   }
 
   void status() async {
+    uuid.value = await getUdid();
     try {
-      var user = await ApiService.sync();    
+      var user = await ApiService.sync();
       isDev.value = user;
+      print(isDev);
     } catch (e) {
-       print(e);
+      print(e);
     }
   }
 
+  void logout() {
+    box.erase();
+    Get.offAllNamed('/');
+  }
 }

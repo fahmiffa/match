@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import '../model/ApiService.dart';
@@ -16,10 +15,7 @@ getDevices() async {
     return res;
   } else if (Platform.isWindows) {
     WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
-    var res = {
-      'id': udid,
-      'brand': windowsInfo.computerName
-    };
+    var res = {'id': udid, 'brand': windowsInfo.computerName};
     return res;
   } else {
     var res = {'id': null, 'brand': null};
@@ -45,4 +41,10 @@ getUdid() async {
     udid = 'Failed to get UDID.';
   }
   return udid;
+}
+
+getData() async {
+  var device = await getDevices();
+  var user = await ApiService.login(device['id']);
+  return user;
 }

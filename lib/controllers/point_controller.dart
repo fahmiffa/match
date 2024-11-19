@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../helper.dart';
 import '../model/ApiService.dart';
 import '../model/user.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'handle_controller.dart';
 
 class PointController extends GetxController {
@@ -18,9 +18,22 @@ class PointController extends GetxController {
   RxInt hit = 0.obs;
   RxInt kick = 0.obs;
 
-  final box = GetStorage();
-  String get isCode => box.read('code') ?? '';
-  String get isName => box.read('name') ?? '';
+  final userData = User(
+          id: 0,
+          code: '',
+          name: '',
+          partai: '',
+          kelas: '',
+          babak: '',
+          type: '',
+          point: '',
+          status: 0,
+          jurus: 0,
+          contest: '',
+          peserta: List.empty(),
+          side: List.empty(),
+          kontingen: List.empty())
+      .obs;
 
   @override
   void onInit() {
@@ -29,6 +42,7 @@ class PointController extends GetxController {
   }
 
   void dataPoint() async {
+    String isCode = await getUdid();
     var da = await ApiService.cPoint(isCode);
     final List<dynamic> data = da['peserta'];
     peserta.assignAll(data.map((json) => Peserta.fromJson(json)).toList());
@@ -45,6 +59,10 @@ class PointController extends GetxController {
   void addValue(String val, int id, String type, tipe) async {
     var status = await dataController.LoadStatus();
     var timer = await dataController.LoadTimer();
+    String isCode = await getUdid();
+    var user = await getData();
+    userData(user);
+    String isName = userData.value.name;
 
     try {
       if (!status) {
@@ -91,9 +109,11 @@ class PointController extends GetxController {
   }
 
   void addValueVer(String val, int id, String type, tipe) async {
-
+    String isCode = await getUdid();
+    var user = await getData();
+    userData(user);
+    String isName = userData.value.name;
     try {
-
       await ApiService.upValue(val, isCode, id, type);
       String juri = parseName(isName, int.parse(tipe), type);
 
@@ -124,7 +144,6 @@ class PointController extends GetxController {
           red[1] += val;
         }
       }
-
     } catch (e) {
       Get.snackbar('Error', '${e}',
           colorText: Colors.white, backgroundColor: Colors.red[800]);

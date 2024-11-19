@@ -18,7 +18,6 @@ class SockController extends GetxController {
   RxInt isVal = 0.obs;
 
   final box = GetStorage();
-  String get isCode => box.read('code') ?? '';
   int get isId => box.read('id') ?? 0;
 
   @override

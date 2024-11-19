@@ -1,7 +1,7 @@
 import 'package:Match/controllers/handle_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import '../helper.dart';
 import '../model/ApiService.dart';
 import '../model/user.dart';
 
@@ -12,9 +12,6 @@ class TabControllers extends GetxController
 
   RxBool button = true.obs;
   RxBool buttonPower = true.obs;
-  final box = GetStorage();
-  String get isCode => box.read('code') ?? '';
-  String get isJurus => box.read('jur').toString();
 
   bool attack = true;
   bool firmness = true;
@@ -49,14 +46,14 @@ class TabControllers extends GetxController
   @override
   void onInit() {
     getPoint();
-    startUp();
+    // startUp();
     tabController =
         TabController(vsync: this, length: tabs.length, initialIndex: 0);
     super.onInit();
   }
 
   void getPoint() async {
-    var user = await ApiService.login(isCode);
+    var user = await getData();
     userData(user);
     modVal.value = userData.value.point;
 
@@ -98,20 +95,20 @@ class TabControllers extends GetxController
     }
   }
 
-  void startUp() {
-    for (int i = 0; i < int.parse(isJurus); i++) {
-      tabs.add(Tab(
-        child: Text(
-          'Jurus ${i + 1}',
-          overflow: TextOverflow.ellipsis,
-        ),
-      ));
-    }
-  }
+  // void startUp() {
+  //   for (int i = 0; i < int.parse(isJurus); i++) {
+  //     tabs.add(Tab(
+  //       child: Text(
+  //         'Jurus ${i + 1}',
+  //         overflow: TextOverflow.ellipsis,
+  //       ),
+  //     ));
+  //   }
+  // }
 
   void addArt(String val, String type) async {
     button.value = false;
-
+    String isCode = await getUdid();
     var status = await dataController.LoadStatus();
     var timer = await dataController.LoadTimer();
 
@@ -137,6 +134,7 @@ class TabControllers extends GetxController
   void addGanda(String val, String type, int par) async {
     var status = await dataController.LoadStatus();
     var timer = await dataController.LoadTimer();
+    String isCode = await getUdid();
 
     try {
       if (!status) {
@@ -171,6 +169,7 @@ class TabControllers extends GetxController
 
   void addPower(String val, String type, int index) async {
     var status = await dataController.LoadStatus();
+    String isCode = await getUdid();
     try {
       if (!status) {
         throw Exception('Pertandingan belum di mulai');
@@ -188,6 +187,7 @@ class TabControllers extends GetxController
   void addPoint(String val, String type, int index) async {
     var status = await dataController.LoadStatus();
     var timer = await dataController.LoadTimer();
+    String isCode = await getUdid();
     try {
       if (!status) {
         throw Exception('Pertandingan belum di mulai');
@@ -196,6 +196,7 @@ class TabControllers extends GetxController
       if (!timer) {
         throw Exception('TImer belum berjalan');
       }
+
       await ApiService.cArt(isCode, val, type);
       if (points.containsKey(index)) {
         points[index] = double.parse(val);

@@ -14,26 +14,23 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: Row(
-          children: [
-            Text(
-              authController.isDev.value ? authController.uuid.value : 'Ringgana',
-              style: TextStyle(fontSize: 24, color: Colors.white),
-            ),
-          ],
-        ),
+        title: Obx(() => Text(
+              authController.isDev.value
+                  ? authController.uuid.value
+                  : 'Ringgana',
+            )),
         actions: [
           IconButton(
             icon: Icon(Icons.replay_outlined),
             onPressed: () {
-              authController.checkLoginStatus();
+              authController.logout();
             },
           ),
         ],
       ),
       body: Center(
         child: CircularProgressIndicator(),
-      ), 
+      ),
     );
   }
 }

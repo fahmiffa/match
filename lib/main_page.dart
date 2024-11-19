@@ -90,7 +90,7 @@ class MainPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () {
-                _authController.checkLoginStatus();
+                _authController.logout();
               },
             ),
           ],
@@ -137,7 +137,7 @@ class MainPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () {
-                _authController.checkLoginStatus();
+                _authController.logout();
               },
             ),
           ],
@@ -189,9 +189,7 @@ class MainPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w500),
                       )
-                    : homeController.matchStatus.value.status == 0
-                        ? Open()
-                        : Off())
+                    : Done())
               ],
             )
           ],
@@ -456,34 +454,15 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  Widget Off() {
+  Widget Done() {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: [      
             Container(
-              width: 100,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  homeController.UpdateStatus('0');
-                },
-                child: Text('CLOSE',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              width: 100,
+              width: 240,
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -495,57 +474,7 @@ class MainPage extends StatelessWidget {
                 onPressed: () {
                   homeController.UpdateStatus('1');
                 },
-                child: Text('END',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget Open() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  homeController.UpdateStatus('2');
-                },
-                child: Text('OPEN',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              width: 100,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  homeController.UpdateStatus('1');
-                },
-                child: Text('END',
+                child: Text('Akhiri Pertandingan',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               ),

@@ -25,7 +25,7 @@ class TimerPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.replay_outlined),
             onPressed: () {
-               _authController.checkLoginStatus();
+               _authController.logout();
             },
           ),
         ],

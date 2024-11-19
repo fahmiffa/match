@@ -35,7 +35,7 @@ class PointPage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.replay_outlined),
                 onPressed: () {
-                  _authController.checkLoginStatus();
+                  _authController.logout();
                 },
               ),
             ],
@@ -137,7 +137,7 @@ class PointPage extends StatelessWidget {
               onPressed: () {
                 if (x == 1) {
                   pointController.addValueVer(
-                      '1', arr[1].id, ver(x), arr[1].type);
+                      '3', arr[1].id, ver(x), arr[1].type);
                 }
 
                 if (x == 2) {
@@ -172,7 +172,7 @@ class PointPage extends StatelessWidget {
               ),
               onPressed: () {
                 pointController.addValueVer(
-                    '-5', arr[1].id, 'invalid', arr[1].type);
+                    '0', arr[1].id, 'invalid', arr[1].type);
               },
               child: Text('Invalid',
                   style: TextStyle(

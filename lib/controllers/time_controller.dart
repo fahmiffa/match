@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import '../helper.dart';
 import '../model/user.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import '../model/ApiService.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -22,16 +22,32 @@ class TimeController extends GetxController {
 
   var times = <Waktu>[].obs;
 
-  final box = GetStorage();
-  String get isCode => box.read('code') ?? '';
-  int get isId => box.read('id') ?? 0;
+  final userData = User(
+          id: 0,
+          code: '',
+          name: '',
+          partai: '',
+          kelas: '',
+          babak: '',
+          type: '',
+          point: '',
+          status: 0,
+          jurus: 0,
+          contest: '',
+          peserta: List.empty(),
+          side: List.empty(),
+          kontingen: List.empty())
+      .obs;
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  void startTimer() {
+  void startTimer() async {
+    var user = await getData();
+    userData(user);
+    int isId = userData.value.id;
     dataController.LoadStatus();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       seconds.value++;
@@ -77,6 +93,7 @@ class TimeController extends GetxController {
   }
 
   void UpdateTime(String stat, String timer) async {
+    String isCode = await getUdid();
     var tim = await ApiService.upTimer(stat, isCode, timer);
     times.assignAll(tim);
   }

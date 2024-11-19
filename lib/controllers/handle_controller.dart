@@ -1,16 +1,11 @@
+import 'package:Match/helper.dart';
 import 'package:flutter/material.dart';
-
 import '../model/ApiService.dart';
 import '../model/user.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class HandleController extends GetxController {
   final matchStatus = Status(status: 0, move: 0, ver: 0).obs;
-
-  final box = GetStorage();
-  String get isCode => box.read('code') ?? '';
-  bool get isLogin => box.read('isLogin') ?? false;
 
   @override
   void onInit() {
@@ -19,6 +14,7 @@ class HandleController extends GetxController {
 
   LoadStatus() async {
     try {
+      String isCode = await getUdid();
       var data = await ApiService.status(isCode);
       matchStatus(data);
       return matchStatus.value.status == 2 ? true : false;
@@ -30,6 +26,7 @@ class HandleController extends GetxController {
 
   LoadTimer() async {
     try {
+      String isCode = await getUdid();
       var data = await ApiService.status(isCode);
       matchStatus(data);
       return matchStatus.value.move == 1 ? true : false;
